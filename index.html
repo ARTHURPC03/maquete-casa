@@ -89,7 +89,8 @@ label.it em{font-style:normal;color:var(--muted)}
 label.it a{color:var(--sea)}
 .foot{border-top:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) 12px 18px;font-size:12px;color:var(--muted);line-height:1.4}
 .handle{display:none}
-.ov{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 92%,transparent);z-index:20;display:flex;flex-direction:column;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));gap:12px;overflow:auto}
+.ov>*{flex:none}
+.ov{position:fixed;inset:0;background:color-mix(in srgb,var(--bg) 97%,transparent);z-index:20;display:flex;flex-direction:column;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 16px max(16px,env(safe-area-inset-left,0px));gap:12px;overflow:auto}
 .ov header{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .ov h2{margin:0;font:800 22px/1.1 var(--f-display);font-stretch:80%}
 .gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
@@ -150,6 +151,7 @@ table.deals a{color:var(--sea)}
       <div class="plans" id="plans" role="group" aria-label="Planos prontos"></div>
       <div class="budget" id="budget"></div>
       <div class="row">
+        <button class="btn" id="bOrc">Orçamento detalhado</button>
         <button class="btn" id="bFotos">Fotos antes e depois</button>
         <button class="btn" id="bDeals">Ofertas Black Friday</button>
         <a class="btn" id="bPedido" href="https://github.com/ARTHURPC03/maquete-casa/issues/new?template=pedido.yml" target="_blank" rel="noopener" style="text-decoration:none">Pedir mudança</a>
@@ -161,6 +163,7 @@ table.deals a{color:var(--sea)}
 </div>
 <div class="ov" id="ovFotos" hidden></div>
 <div class="ov" id="ovDeals" hidden></div>
+<div class="ov" id="ovOrc" hidden></div>
 
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
@@ -379,7 +382,24 @@ document.getElementById('bDeals').onclick=()=>{const d=DEALS||{lojas:[],produtos
    ${d.produtos.map(p=>`<tr><td>${p.ambiente||''}</td><td>${p.url?`<a href="${p.url}" target="_blank" rel="noopener">${p.produto}</a>`:p.produto}${p.medidas?`<br><small style="color:var(--muted)">${p.medidas}</small>`:''}</td><td>${p.loja}</td><td class="n">${brl(p.preco)}</td><td class="n">${p.preco_de?brl(p.preco_de):''}</td><td class="n">${p.desconto_pct?Math.round(p.desconto_pct)+'%':''}</td></tr>`).join('')}
    </tbody></table></div>`;
   ovD.hidden=false;ovD.querySelector('[data-close]').onclick=()=>ovD.hidden=true};
-addEventListener('keydown',e=>{if(e.key==='Escape'){ovF.hidden=true;ovD.hidden=true}});
+// ---------- orçamento detalhado
+const ovO=document.getElementById('ovOrc');
+document.getElementById('bOrc').onclick=()=>{const rows=[],agg={};let tb=0,tp=0;
+  ROOMS.forEach(r=>{const o=r.opts.find(o=>o.id===choice[r.id]);if(!o)return;o.items.forEach(it=>{const c=itemCost(it);if(!c||c.bom==null)return;
+    const u=c.u.p;rows.push({r:r.name,f:FLN[r.floor],n:it.n,q:it.q||1,b:c.bom,p:c.prem,ub:u.bom,up:u.premium});tb+=c.bom;tp+=c.prem;
+    const a=agg[it.k]||(agg[it.k]={n:it.n,q:0,d:0,pp:u.premium?.produto,pl:u.premium?.loja,rs:new Set()});a.rs.add(r.name);if(a.rs.size>1)a.n=it.n.replace(/ (para|do|da|de) .*/,'')+' (vários cômodos)';a.q+=it.q||1;a.d+=c.prem-c.bom})});
+  const top=Object.values(agg).sort((a,b)=>b.d-a.d).slice(0,6);const pl=PLANS.find(pl=>Object.entries(pl.c).every(([k,v])=>choice[k]===v));
+  const lk=(x,v)=>x?.url?`<a href="${x.url}" target="_blank" rel="noopener">${brl(v)}</a>`:brl(v);
+  ovO.innerHTML=`<header><h2>Orçamento detalhado${pl?' · '+pl.name:''}</h2><button class="btn" data-close>Fechar</button></header>
+   <p class="cap" style="text-align:left;margin:0;max-width:70ch"><b style="color:var(--ink)">Faixa boa: ${brl(tb)}.</b> É o número para planejar: a opção mais barata achada para cada peça, entre a pesquisa geral e as ofertas (Tok&amp;Stok, Leroy, Mobly, MadeiraMadeira, Decathlon, Casas Bahia...). <b style="color:var(--ink)">Premium: ${brl(tp)}.</b> É a linha mais cara de cada peça, só como teto de referência. A diferença vem de poucas peças:</p>
+   <div class="tw"><table class="deals"><thead><tr><th>Peça</th><th style="text-align:right">Qtd.</th><th style="text-align:right">Diferença bom → premium</th><th>Premium usado</th></tr></thead><tbody>
+   ${top.map(a=>`<tr><td>${a.n}</td><td class="n">${a.q}</td><td class="n">+ ${brl(a.d)}</td><td>${a.pp||''}${a.pl?` <small style="color:var(--muted)">(${a.pl})</small>`:''}</td></tr>`).join('')}</tbody></table></div>
+   <div class="tw"><table class="deals"><thead><tr><th>Andar · cômodo</th><th>Peça</th><th style="text-align:right">Qtd.</th><th style="text-align:right">Bom</th><th>Loja</th><th style="text-align:right">Premium</th></tr></thead><tbody>
+   ${rows.map(x=>`<tr><td>${x.f} · ${x.r}</td><td>${x.n}</td><td class="n">${x.q}</td><td class="n">${lk(x.ub,x.b)}</td><td>${x.ub?.loja||''}</td><td class="n">${lk(x.up,x.p)}</td></tr>`).join('')}
+   <tr><td colspan="3"><b>Total</b></td><td class="n"><b>${brl(tb)}</b></td><td></td><td class="n"><b>${brl(tp)}</b></td></tr></tbody></table></div>
+   <p class="cap" style="text-align:left;margin:0">Não inclui marcenaria, cortinas sob medida da casa inteira, mão de obra, frete e o que já fica com a casa. Troque as opções de cada cômodo ou o plano e abra de novo para recalcular.</p>`;
+  ovO.hidden=false;ovO.querySelector('[data-close]').onclick=()=>ovO.hidden=true};
+addEventListener('keydown',e=>{if(e.key==='Escape'){ovF.hidden=true;ovD.hidden=true;ovO.hidden=true}});
 
 // clique no piso → cômodo mais próximo
 const ray=new THREE.Raycaster(),mv=new THREE.Vector2();let down=null;
