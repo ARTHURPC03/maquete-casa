@@ -390,6 +390,26 @@ o['items']=[I('bed','Cama box queen com colchão',1.58,1.98,x=-0.45,z=-0.72,k='c
             I('nightstand','Criado-mudo',0.45,0.4,x=-1.55,z=-1.5,k='criado'),
             I('wardrobe','Guarda-roupa 2 portas de correr (109 cm)',1.09,0.54,x=1.3,z=-1.45,h=2.18,k='guardaRoupa')]
 tv['name']='Sala de TV / quarto'
+# ---- Luiz (06/11 03:30): TV na outra ponta, ping-pong volta para o lugar dele (ponta leste, perto dos degraus da sala redonda), 1 mesa de poker
+jg=next(o for o in next(r for r in R if r['id']=='jogos')['opts'] if o['id']=='jogos_enx')
+jg['name']='Poker, sinuca e TV'
+jg['desc']=('Na ponta oeste, o canto de TV com sofá em L. No meio, uma mesa de poker para 9 pessoas. Depois vêm a sinuca e o ping-pong que já estão na casa, '
+            'com o ping-pong no lugar dele, perto dos degraus da sala redonda. Para torneio maior, uma segunda mesa alugada ou comprada depois cabe na sala de reunião.')
+jg['items']=[
+    I('tv','TV 85" na parede',1.9,0.05,x=-5.76,z=0,r=-90,y=0.75,k='tv85'),
+    I('sofaL','Sofá em L',3.0,2.1,x=-3.75,z=0.2,r=90,m='leatherDark',k='sofaL'),
+    I('rug','Tapete 2 × 3 m',3.0,2.4,x=-4.5,z=0.1,m='sand',k='tapete23'),
+    I('poker','Mesa de poker oval 9 lugares',2.4,1.25,x=-0.9,z=0,k='poker'),P('Cadeiras estofadas para o poker','cadeiraJantar',9),
+    I('pendant','Pendente sobre a mesa',1.8,0.1,x=-0.9,z=0,k='pendente'),
+    I('poolTable','Mesa de sinuca (já está lá)',2.5,1.4,x=1.85,z=0,r=90,ref=True),
+    I('pingpong','Mesa de ping-pong (já está lá)',2.74,1.53,x=4.5,z=0.3,r=90,ref=True),
+    I('rack','Aparador como bar',1.6,0.45,x=-0.9,z=-3.1,h=0.85,k='aparador'),
+    I('art','Quadro decorativo tema dinheiro (salão)',1.2,0.03,x=-3.6,z=-3.3,y=1.35,m='felt',k='quadro',q=3),
+    I('art','Quadro decorativo tema dinheiro',1.2,0.03,x=1.85,z=-3.3,y=1.35,m='felt'),
+    I('art','Quadro decorativo tema dinheiro',1.2,0.03,x=5.82,z=-1.6,r=90,y=1.35,m='felt'),
+    P('Câmera para gravar o dia a dia (vídeo orgânico, andando pela casa)','camera'),I('none','Microfone de lapela sem fio (sem preço achado; conferir na loja)')]
+g=next(o for o in next(r for r in R if r['id']=='gar')['opts'] if o['id']=='gar_enx')
+g['items']=[i for i in g['items'] if i['t']!='pingpong']; g['desc']='Três vagas e uma estante de aço.'
 # peças repetidas só para o desenho: escondidas da lista (o preço vai na primeira, com q)
 for r in R:
     for o in r['opts']:
