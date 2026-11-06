@@ -1,0 +1,23 @@
+name: Pedido de mudança na maquete
+description: Peça uma mudança na maquete, nos móveis ou no orçamento
+title: "[pedido] "
+labels: ["pedido"]
+body:
+  - type: dropdown
+    id: andar
+    attributes:
+      label: Andar
+      options: [Casa toda, Garagem, Térreo, 1º pavimento, 2º pavimento]
+    validations: {required: true}
+  - type: input
+    id: comodo
+    attributes:
+      label: Cômodo
+      placeholder: "ex.: Salão de jogos, Suíte A, Deck da piscina"
+  - type: textarea
+    id: pedido
+    attributes:
+      label: O que mudar
+      description: Escreva como falaria com o Claude. Medida, loja ou link do produto ajudam.
+      placeholder: "ex.: troca o sofá da sala de estar por um de couro de 3,2 m e põe uma terceira mesa de poker no salão"
+    validations: {required: true}

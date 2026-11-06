@@ -47,6 +47,11 @@ I('sofa','Sofá 3 lugares',2.4,0.95,x=0,z=1.0,r=180,m='linen',k='sofa3')
 
 O `k` liga o item ao `data/prices.json`. Um item só de orçamento, sem desenho, usa `P(nome, k, q)`.
 
+## Pedidos
+
+Pedidos de mudança chegam como issues com o rótulo `pedido` (botão "Pedir mudança" no site). Para atender:
+leia a issue, faça a mudança, rode o fluxo acima, faça o push e comente na issue com o link de onde ela aparece.
+
 ## Regras
 
 - Preço só entra com a página da loja (URL e data). Nada de média de mercado.
