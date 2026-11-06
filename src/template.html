@@ -56,7 +56,7 @@ aside{background:var(--panel);border-left:1px solid var(--line);display:flex;fle
 .bar .band{position:absolute;top:0;bottom:0;background:var(--sea-soft)}
 .bar .rng{position:absolute;top:2px;bottom:2px;border-radius:4px;background:var(--sea)}
 .scale{display:flex;justify-content:space-between;font:400 10px var(--f-data);color:var(--muted);font-variant-numeric:tabular-nums}
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.plans{display:grid;grid-template-columns:repeat(2,1fr);gap:6px}
 .plan{border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);padding:8px 9px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
 .plan b{font:700 13px/1.15 var(--f-body)}
 .plan small{font:400 11px/1.3 var(--f-body);color:var(--muted)}
@@ -172,10 +172,13 @@ table.deals a{color:var(--sea)}
 <script>
 const MODEL=/*MODEL*/null, TEX=/*TEX*/null, ROOMS=/*ROOMS*/null, PRICES=/*PRICES*/null, DEALS=/*DEALS*/null, PHOTOS=/*PHOTOS*/null, EXTRA=/*EXTRA*/null;
 const BUDGET=[100000,250000];
+const FULL=Object.fromEntries(ROOMS.filter(r=>r.opts.length).map(r=>[r.id,(r.opts.find(o=>!o.id.endsWith('_enx'))||r.opts[0]).id]));
+const ENX=Object.fromEntries(ROOMS.filter(r=>r.opts.some(o=>o.id.endsWith('_enx'))).map(r=>[r.id,r.id+'_enx']));
 const PLANS=[
- {id:'A',name:'Plano A',sub:'O que vocês pensaram: poker, TV e academia no salão; podcast na sala redonda',c:{jogos:'pokertv',redonda:'podcast',vidro:'edicao'}},
- {id:'B',name:'Plano B',sub:'Recomendado: cinema e poker no salão, academia com vista na sala de vidro, podcast na redonda',c:{jogos:'cinepoker',redonda:'podcast',vidro:'gym'}},
- {id:'C',name:'Plano C',sub:'Cinema na redonda: poker, TV e academia no salão; sem estúdio',c:{jogos:'pokertv',redonda:'cinema',vidro:'edicao'}}];
+ {id:'E',name:'Plano Enxuto',sub:'Recomendado: aluguel de 1–2 anos, eventos e Instagram. Gasta onde tem evento e câmera e aproveita o que já está na casa',c:{...FULL,...ENX}},
+ {id:'A',name:'Plano A',sub:'Completo: poker, TV e academia no salão; podcast na sala redonda',c:{...FULL,jogos:'pokertv',redonda:'podcast',vidro:'edicao'}},
+ {id:'B',name:'Plano B',sub:'Completo: cinema e poker no salão, academia na sala de vidro, podcast na redonda',c:{...FULL,jogos:'cinepoker',redonda:'podcast',vidro:'gym'}},
+ {id:'C',name:'Plano C',sub:'Completo: cinema na redonda; poker, TV e academia no salão',c:{...FULL,jogos:'pokertv',redonda:'cinema',vidro:'edicao'}}];
 const FLOORS=[{id:'garagem',name:'Garagem',y:0},{id:'terreo',name:'Térreo',y:3.0},{id:'p1',name:'1º pav.',y:6.0},{id:'p2',name:'2º pav.',y:9.0}];
 const FLN={garagem:'Garagem',terreo:'Térreo',p1:'1º pavimento',p2:'2º pavimento'};
 const WALL_H=2.7;
@@ -195,9 +198,9 @@ const brl=v=>v==null?'—':'R$ '+Math.round(v).toLocaleString('pt-BR');
 const kbrl=v=>v>=1000?'R$ '+(v/1000).toLocaleString('pt-BR',{maximumFractionDigits:v<10000?1:0})+' mil':brl(v);
 let mode='prop';
 const choice={};ROOMS.forEach(r=>{if(r.opts.length)choice[r.id]=r.def||r.opts[0].id});
-try{Object.assign(choice,JSON.parse(localStorage.getItem('cacupe-opt')||'{}'))}catch(e){}
+try{Object.assign(choice,JSON.parse(localStorage.getItem('cacupe-opt3')||'{}'))}catch(e){}
 let done={};try{done=JSON.parse(localStorage.getItem('cacupe-done2')||'{}')}catch(e){}
-const saveState=()=>{try{localStorage.setItem('cacupe-opt',JSON.stringify(choice));localStorage.setItem('cacupe-done2',JSON.stringify(done))}catch(e){}};
+const saveState=()=>{try{localStorage.setItem('cacupe-opt3',JSON.stringify(choice));localStorage.setItem('cacupe-done2',JSON.stringify(done))}catch(e){}};
 
 // ---------- cena
 const stage=document.getElementById('stage');
@@ -322,7 +325,7 @@ function renderBudget(){renderPlans();let b=0,p=0,miss=0;ROOMS.forEach(r=>{const
   document.getElementById('budget').innerHTML=`<div class="nums"><b>${kbrl(b)} – ${kbrl(p)}</b><span>proposta · faixa boa → premium</span></div>
    <div class="bar" aria-label="Orçamento"><div class="band" style="left:${pct(BUDGET[0])}%;width:${pct(BUDGET[1])-pct(BUDGET[0])}%"></div><div class="rng" style="left:${pct(b)}%;width:${Math.max(1,pct(p)-pct(b))}%"></div></div>
    <div class="scale"><span>0</span><span>orçamento ${kbrl(BUDGET[0])}–${kbrl(BUDGET[1])}</span><span>${kbrl(max)}</span></div>
-   <p style="margin:2px 0 0;font-size:12px;line-height:1.4;color:var(--muted)">${b<=BUDGET[1]?`<b style="color:var(--ok)">Cabe no orçamento</b> na faixa boa, sobrando ${kbrl(BUDGET[1]-b)} para marcenaria, cortinas e decoração.`:`<b style="color:var(--warn)">Passa ${kbrl(b-BUDGET[1])}</b> do teto mesmo na faixa boa.`} O premium é a linha alta de cada peça, como referência.</p>`;
+   <p style="margin:2px 0 0;font-size:12px;line-height:1.4;color:var(--muted)">${b<=BUDGET[1]?`<b style="color:var(--ok)">Cabe no orçamento</b> na faixa boa, sobrando ${kbrl(BUDGET[1]-b)} para marcenaria, cortinas e decoração.`:`<b style="color:var(--warn)">Passa ${kbrl(b-BUDGET[1])}</b> do teto mesmo na faixa boa.`} O premium é a linha alta de cada peça, como referência. Os planos completos (A, B e C) mostram até onde dá para ir.</p>`;
   document.getElementById('foot').innerHTML=`Preços das páginas das lojas, acessadas em ${PRICES?._acesso||'nov/2026'}. Não inclui marcenaria, mão de obra nem frete${miss?`; ${miss} item(ns) sem preço achado`:''}. As escolhas e as marcações ficam salvas neste aparelho.`}
 
 // ---------- UI

@@ -26,7 +26,7 @@ L={'sofaL':'Sofá em L','tv85':'TV 85"','banqueta':'Banquetas','adega':'Adega','
  'mesaCentro':'Mesa de centro@Salas','tapete23':'Tapete 2x3','luminariaPiso':'Luminária de piso','pendente':'Pendente','aparador':'Aparador','rack':'Rack@Salas',
  'mesaJantar8':'Mesa 8 lugares','cadeiraJantar':'Cadeiras@Jantar','camaQueen':'Cama box queen + colchão','cabeceira':'Cabeceira king','criado':'Criado-mudo',
  'escrivaninha':'Escrivaninha','espreguicadeira':'Espreguiçadeira','guardaSol':'Guarda-sol','sofaExt':'Sofá externo','poltronaExt':'Poltrona externa',
- 'mesaCentroExt':'Mesa de centro externa','cervejeira':'Cervejeira','secadora':'Secadora','quadro':'Quadros'}
+ 'mesaCentroExt':'Mesa de centro externa','cervejeira':'Cervejeira','secadora':'Secadora','quadro':'Quadros','estanteAco':'Estante de aço'}
 def find_geral(name,tier):
     for x in geral:
         if x['item'].startswith(name) and x['tier']==tier: return x
@@ -38,6 +38,7 @@ def rec(x,fac=1,loja=None):
     if not x or x.get('preco') is None: return None
     return {'p':round(x['preco']*fac,2),'loja':loja or x.get('loja'),'produto':x.get('produto'),'url':x.get('url'),'acesso':x.get('acesso')}
 out={'_acesso':'05 e 06/11/2026'}
+for k in ('estanteAco','cadeiraTrabalho'): G.setdefault(k,'__nenhum__')
 for k,spec in G.items():
     nm,fac=(spec if isinstance(spec,tuple) else (spec,{}))
     b=rec(find_geral(nm,'bom'),fac.get('bom',1)); p=rec(find_geral(nm,'premium'),fac.get('premium',1))

@@ -238,6 +238,76 @@ for sid,(x,z),nome,obs,kind in [
         items=base+[I('armchair','Poltrona',0.75,0.78,x=-1.3,z=1.2,r=150,k='poltrona'),I('rug','Tapete 2 × 3 m',2.6,2.0,z=0,k='tapete23')]
         desc='Quarto de hóspedes: mantém as camas e ganha poltrona e tapete.'
     room(sid,'p2',nome,x,z,'~3,7 × 3,9 m',14,obs,base=base,opts=[opt(sid+'o',nome,desc,items)],df=sid+'o',rot=44,fl=dict(w=3.7,d=3.9,m='madeira'))
+# ================= PLANO ENXUTO (aluguel de 1–2 anos, eventos, Instagram) =================
+# Regra: gastar onde tem evento e câmera; quarto no básico; nada sob medida; aproveitar o que já está na casa.
+def enx(room_id,name,desc,items):
+    r=next(r for r in R if r['id']==room_id); r['opts'].insert(0,opt(room_id+'_enx',name,desc,items)); r['def']=room_id+'_enx'
+pkx=lambda x,z:[I('poker','Mesa de poker oval 9 lugares',2.4,1.25,x=x,z=z,k='poker'),P('Cadeiras estofadas para o poker','cadeiraJantar',9),
+                I('pendant','Pendente sobre a mesa',1.8,0.1,x=x,z=z,k='pendente')]
+enx('jogos','Poker para eventos','Duas mesas de poker para torneio de 18 pessoas, a sinuca que já está lá no meio e um canto de TV para quem está fora da mesa. O ping-pong vai para a garagem. Cadeira estofada em vez de giratória de couro, porque são 18.',[
+    *pkx(-3.4,-1.6),*pkx(-3.4,1.6),
+    I('poolTable','Mesa de sinuca (já está lá)',2.5,1.4,x=0.9,z=0,r=90,ref=True),
+    I('tv','TV 85" na parede',1.9,0.05,x=5.76,z=0,r=90,y=0.75,k='tv85'),
+    I('sofaL','Sofá em L',3.0,2.1,x=3.6,z=0.2,r=-90,m='leatherDark',k='sofaL'),
+    I('rug','Tapete 2 × 3 m',3.0,2.4,x=4.5,z=0.1,m='sand',k='tapete23'),
+    I('rack','Aparador como bar',1.6,0.45,x=0.9,z=-3.1,h=0.85,k='aparador'),
+    I('fridge','Adega climatizada',0.6,0.6,x=2.1,z=-3.05,h=0.85,m='black',k='adega'),
+    I('palm','Palmeira em vaso',0.6,0.6,x=5.4,z=2.9,k='planta')])
+podx=[I('rug','Tapete redondo',2.8,2.8,z=0.3,round=True,m='olive',k='tapete23'),
+      I('podTable','Mesa de podcast para 4',1.4,1.4,z=0.3,seats=4,k='mesaPodcast'),P('Cadeiras','cadeiraErgo',4),
+      P('Microfones Shure SM7B (2 agora, 4 depois)','sm7b',2),P('Braços articulados','braco',2),P('Mesa de som RØDECaster Pro II','rodecaster'),
+      I('softbox','Kit de luz de estúdio',0.6,0.6,x=-2.4,z=-1.0,r=face(-2.4,-1.3),k='luzEstudio'),I('softbox','Luz',0.6,0.6,x=2.4,z=-1.0,r=face(2.4,-1.3)),
+      I('acoustic','Painéis acústicos na parede de pedra (m²)',2.6,0.05,z=-3.05,h=1.8,k='painelAcustico',q=6),
+      I('curtain','Cortina blackout no vidro',2.4,0.06,z=3.15,r=180,k='cortina',q=3),
+      I('neon','Letreiro neon (marca de vocês)',1.0,0.03,z=-3.2,y=1.9)]
+enx('redonda','Estúdio enxuto','Estúdio para gravar com o que importa: som bom (2 microfones e mesa de som), luz e tratamento acústico. Grava com os iPhones no começo e a câmera entra depois, se o conteúdo pedir.',podx)
+enx('vidro','Sala de reunião','Para reunião de negócio: mesa para 8 com TV de 65" para apresentação. A parede de espelho fica atrás de quem apresenta, e a sala abre para o jardim.',[
+    I('dining','Mesa de reunião para 8',2.2,1.0,seats=8,cm='black',cs='charcoal',k='mesaJantar8'),P('Cadeiras estofadas','cadeiraJantar',8),
+    I('tv','TV 65" para apresentação',1.45,0.05,z=-2.4,y=0.9,k='tv65')])
+enx('estar','Estar das fotos','Mantém o sofá redondo de rattan e o painel de TV e completa com tapete, duas poltronas de couro e mesa de centro. É o canto que mais aparece em foto.',[
+    I('rattanRound','Sofá redondo de rattan (já está lá)',2.2,2.2,x=-1.2,z=0.6,ref=True),I('rack','Rack branco (já está lá)',2.2,0.45,z=-1.68,m='white',ref=True),
+    I('rug','Tapete 3 × 4 m',4.0,3.0,z=0.1,m='sand',k='tapete34'),I('armchair','Poltronas de couro',0.8,0.82,x=1.9,z=0.5,r=200,k='poltrona',q=2),
+    I('armchair','Poltrona de couro',0.8,0.82,x=2.3,z=-0.7,r=240),I('coffee','Mesa de centro',0.85,0.85,x=0.4,z=-0.2,round=True,k='mesaCentro'),
+    I('palm','Palmeira em vaso',0.6,0.6,x=-2.55,z=-1.4,k='planta')])
+enx('jantar','Jantar como está','A mesa longa com 8 cadeiras já está na casa. Entra só um pendente. Se o dono levar a mesa, use a opção completa.',[
+    I('dining','Mesa de jantar com 8 cadeiras (já está lá)',2.4,1.0,seats=8,ref=True),I('pendant','Pendente',1.8,0.1,k='pendente')])
+enx('estar2','Lounge da vista','Sofá de frente para o mar, as poltronas laranja que já estão lá, mesa de centro e tapete.',[
+    I('sofa','Sofá 3 lugares',2.4,0.95,x=-0.3,z=-0.9,m='linen',k='sofa3'),
+    I('armchair','Poltronas laranja (já estão lá)',0.8,0.8,x=-1.6,z=1.0,r=160,m='orange',ref=True),I('armchair','Poltrona laranja',0.8,0.8,x=1.0,z=1.0,r=200,m='orange',ref=True),
+    I('coffee','Mesa de centro',0.85,0.85,x=-0.3,z=0.1,round=True,k='mesaCentro'),I('rug','Tapete 2 × 3 m',3.0,2.0,x=-0.3,z=0.05,m='sand',k='tapete23')])
+enx('tv','Escritório','Um posto de trabalho com cadeira boa. A TV fica no salão e no estar, então aqui não precisa.',[
+    I('desk','Escrivaninha',1.2,0.6,z=-1.3,k='escrivaninha'),I('officeChair','Cadeira de escritório Insight',0.6,0.6,z=-0.6,r=180,k='cadeiraTrabalho')])
+enx('gourmet','Gourmet como está','Mesa redonda e banquetas já estão lá. Entra só a cervejeira.',[
+    I('dining','Mesa redonda de vidro com 4 cadeiras (já está lá)',1.1,1.1,x=0.4,z=0.6,seats=4,ref=True),
+    I('stool','Banquetas brancas (já estão lá)',0.4,0.4,x=-0.9,z=-0.95,m='white',ref=True),I('stool','Banqueta branca',0.4,0.4,x=-0.3,z=-0.95,m='white',ref=True),
+    I('fridge','Cervejeira',0.6,0.65,x=2.75,z=-1.5,h=1.5,m='black',k='cervejeira')])
+enx('servico','Fica para depois','Varal agora. A secadora entra só se fizer falta.',[])
+enx('entrada','Entrada','Uma palmeira grande na porta.',[I('palm','Palmeira em vaso',0.6,0.6,x=-1.4,z=-0.9,k='planta')])
+pisx=[]
+for a,x,z in [(20,-4.6,-1.4),(-20,-4.5,1.2),(-20,4.6,-1.4),(20,4.5,1.2)]:
+    pisx.append(I('lounger','Espreguiçadeiras de alumínio',0.7,1.9,x=x,z=z,r=a+(90 if x<0 else -90),k='espreguicadeira' if (x,z)==(-4.6,-1.4) else None,**({'q':4} if (x,z)==(-4.6,-1.4) else {})))
+pisx+=[I('umbrella','Guarda-sol',2.6,2.6,x=-4.4,z=3.0,k='guardaSol'),I('palm','Palmeiras em vaso',0.6,0.6,x=4.0,z=-3.6,k='planta',q=2),I('palm','Palmeira',0.6,0.6,x=-4.0,z=-3.6)]
+enx('piscina','Deck pronto para foto','Quatro espreguiçadeiras de alumínio (aguentam sol, chuva e cachorro), guarda-sol e palmeiras.',pisx)
+enx('master','Master no básico','Cama king com colchão, cabeceira e dois criados. A escrivaninha e o painel já estão lá.',[
+    I('bed','Cama box king com colchão',1.93,2.03,z=-0.75,hbm='sand',k='camaKing'),P('Cabeceira king','cabeceira'),
+    I('nightstand','Criados-mudos',0.5,0.4,x=-1.35,z=-1.55,k='criado',q=2),I('nightstand','Criado-mudo',0.5,0.4,x=1.35,z=-1.55),
+    I('desk','Escrivaninha (já está lá)',1.4,0.6,x=-2.3,z=0.9,ref=True,mon=False)])
+enx('sb','Suíte B no básico','Cama box queen com colchão e dois criados. A escrivaninha já está lá.',[
+    I('bed','Cama box queen com colchão',1.58,1.98,z=-0.6,k='camaQueen'),I('nightstand','Criados-mudos',0.45,0.4,x=-1.1,z=-1.4,k='criado',q=2),
+    I('nightstand','Criado-mudo',0.45,0.4,x=1.1,z=-1.4),I('desk','Escrivaninha (já está lá)',1.2,0.5,x=1.35,z=1.3,r=180,ref=True,mon=False)])
+for sid,desc in [('sa','Já tem cama, escrivaninha e guarda-roupa. Nada a comprar.'),('sc','Já tem as duas camas de solteiro, escrivaninha e criado. Nada a comprar.')]:
+    r=next(r for r in R if r['id']==sid); enx(sid,'Como está',desc,[dict(i) for i in r['base']])
+enx('terraco','Lounge da jacuzzi','Sofá e poltronas externas de alumínio, mesa de centro e espreguiçadeiras de frente para o mar. A jacuzzi e o pergolado já existem.',[
+    I('sofa','Sofá externo 3 lugares',2.2,0.9,x=-4.0,z=-0.9,m='linen',fm='teak',k='sofaExt'),
+    I('ropeChair','Poltronas externas',0.75,0.75,x=-2.4,z=0.4,r=-120,k='poltronaExt',q=2),I('ropeChair','Poltrona externa',0.75,0.75,x=-5.6,z=0.4,r=120),
+    I('coffee','Mesa de centro externa',1.0,0.6,x=-4.0,z=0.2,m='teak',k='mesaCentroExt'),
+    I('lounger','Espreguiçadeiras',0.7,1.9,x=1.0,z=0.6,k='espreguicadeira',q=2),I('lounger','Espreguiçadeira',0.7,1.9,x=2.2,z=0.6),
+    I('palm','Palmeiras em vaso',0.6,0.6,x=-7.4,z=-1.5,k='planta',q=2),I('palm','Palmeira',0.6,0.6,x=4.2,z=-1.6)])
+enx('office2','Vazia por enquanto','Fica livre e só ganha uso se aparecer necessidade.',[])
+enx('gar','Garagem','Três vagas, o ping-pong guardado e uma estante de aço.',[
+    I('car','Vaga 1',1.95,4.5,x=-4.3,z=0.6,ref=True),I('car','Vaga 2',1.95,4.5,x=-1.1,z=0.6,ref=True),I('car','Vaga 3',1.95,4.5,x=2.1,z=0.6,ref=True),
+    I('pingpong','Ping-pong guardado (já está na casa)',2.74,1.53,x=4.6,z=-2.2,r=90,ref=True),
+    I('steelShelf','Estante de aço',1.8,0.5,x=-0.9,z=-3.05,h=2.0,k='estanteAco')])
 # peças repetidas só para o desenho: escondidas da lista (o preço vai na primeira, com q)
 for r in R:
     for o in r['opts']:
