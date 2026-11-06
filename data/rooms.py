@@ -374,6 +374,8 @@ setenx('master','Como está','Já tem cama, escrivaninha, painel e closet. Cada 
 setenx('sb','Como está','Já tem colchão e escrivaninha. Se alguém for ficar fixo aqui, compra a própria cama.',[I('bed','Colchão (já está lá)',1.58,1.98,z=-0.6,ref=True,hb=False),I('desk','Escrivaninha (já está lá)',1.2,0.5,x=1.35,z=1.3,r=180,ref=True,mon=False)])
 h=next(o for o in next(r for r in R if r['id']=='hall2')['opts'] if o['id']=='hall2_enx')
 h['items']=[i for i in h['items'] if i['t'] not in ('desk','officeChair')]
+h['items']=[I('desk','Mesas de trabalho (vocês trazem)',1.4,0.7,x=xx,z=0.45,r=180,ref=True) for xx in (-1.9,0,1.9)]+\
+           [I('officeChair','Cadeiras (vocês trazem)',0.6,0.6,x=xx,z=-0.3,ref=True) for xx in (-1.9,0,1.9)]+h['items']
 h['desc']='O escritório fica aqui, de frente para o blindex e o mar. As mesas vocês já têm e trazem. Entra a persiana elétrica no vidro para controlar o sol e gravar call sem reflexo.'
 cz=next(r for r in R if r['id']=='cozinha'); o=next(o for o in cz['opts'] if o['id']=='cozinha_enx') if any(o['id']=='cozinha_enx' for o in cz['opts']) else None
 if not o:
