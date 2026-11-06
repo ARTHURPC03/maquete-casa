@@ -383,6 +383,13 @@ if not o:
 o['name']='Já está completa'; o['desc']='A cozinha já vem montada e a geladeira inox fica na copa de apoio, ao lado. Só compra outra se o dono levar a dele.'
 o['items']=[
             I('stool','Banquetas vermelhas do bar (já estão lá)',0.4,0.4,x=-0.35,z=1.05,m='redStool',ref=True),I('stool','Banqueta vermelha',0.4,0.4,x=0.35,z=1.05,m='redStool',ref=True)]
+# ---- Luiz (06/11 03:20): a sala livre do 1º pavimento vira quarto
+tv=next(r for r in R if r['id']=='tv'); o=next(o for o in tv['opts'] if o['id']=='tv_enx')
+o['name']='Quarto'; o['desc']='Vira um quarto simples: cama box queen com colchão, guarda-roupa pequeno de 2 portas e um criado-mudo ao lado da cama.'
+o['items']=[I('bed','Cama box queen com colchão',1.58,1.98,x=-0.45,z=-0.72,k='camaQueen'),
+            I('nightstand','Criado-mudo',0.45,0.4,x=-1.55,z=-1.5,k='criado'),
+            I('wardrobe','Guarda-roupa 2 portas de correr (109 cm)',1.09,0.54,x=1.3,z=-1.45,h=2.18,k='guardaRoupa')]
+tv['name']='Sala de TV / quarto'
 # peças repetidas só para o desenho: escondidas da lista (o preço vai na primeira, com q)
 for r in R:
     for o in r['opts']:

@@ -52,6 +52,10 @@ for k,spec in G.items():
             if r and (b is None or r['p']<b['p']): b=r
     if p is None: p=b
     out[k]={'bom':b,'premium':p}
+# preços lidos à mão na página da loja (quando a pesquisa automática não cobriu o item)
+MANUAL={'guardaRoupa':{'p':1159.99,'loja':'Casas Bahia (vendido por WebContinental)','produto':'Guarda-roupa Solteiro Madesa Tokio 2 Portas de Correr com Espelho 2 Gavetas Branco (109 × 218 × 54 cm)',
+        'url':'https://www.casasbahia.com.br/guarda-roupa-solteiro-madesa-tokio-2-portas-de-correr-com-espelho-2-gavetas-branco/p/1572116271','acesso':'2026-11-06'}}
+for k,v in MANUAL.items(): out[k]={'bom':v,'premium':v}
 json.dump(out,open(os.path.join(R,'data/prices.json'),'w'),ensure_ascii=False)
 deals={'lojas':lojas.get('lojas',[]),'produtos':[dict(x,loja=x.get('loja','Leroy Merlin')) for x in leroy]+lojas.get('produtos',[])}
 deals['produtos']=[x for x in deals['produtos'] if x.get('preco')]
