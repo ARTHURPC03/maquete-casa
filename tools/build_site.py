@@ -10,6 +10,8 @@ prices = J('data/prices.json', {})
 deals = J('data/deals.json', {"lojas": [], "produtos": []})
 photos = J('data/fotos.json', [])
 extra = J('data/extra.json', {})
+extra['slab_tex'] = {f: 'data:image/png;base64,' + base64.b64encode(open(os.path.join(R,'data/tex',f+'_slab.png'),'rb').read()).decode()
+                     for f in model['floors'] if os.path.exists(os.path.join(R,'data/tex',f+'_slab.png'))}
 if os.path.exists(os.path.join(R,'data/tex/p1_deck.png')):
     extra['deck_tex'] = 'data:image/png;base64,' + base64.b64encode(open(os.path.join(R,'data/tex/p1_deck.png'),'rb').read()).decode()
 h = open(os.path.join(R, 'src/template.html')).read()

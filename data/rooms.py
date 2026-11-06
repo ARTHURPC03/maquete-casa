@@ -251,7 +251,6 @@ enx('jogos','Poker para eventos','Duas mesas de poker para torneio de 18 pessoas
     I('sofaL','Sofá em L',3.0,2.1,x=3.6,z=0.2,r=-90,m='leatherDark',k='sofaL'),
     I('rug','Tapete 2 × 3 m',3.0,2.4,x=4.5,z=0.1,m='sand',k='tapete23'),
     I('rack','Aparador como bar',1.6,0.45,x=0.9,z=-3.1,h=0.85,k='aparador'),
-    I('fridge','Adega climatizada',0.6,0.6,x=2.1,z=-3.05,h=0.85,m='black',k='adega'),
     I('palm','Palmeira em vaso',0.6,0.6,x=5.4,z=2.9,k='planta')])
 podx=[I('rug','Tapete redondo',2.8,2.8,z=0.3,round=True,m='olive',k='tapete23'),
       I('podTable','Mesa de podcast para 4',1.4,1.4,z=0.3,seats=4,k='mesaPodcast'),P('Cadeiras','cadeiraErgo',4),
@@ -381,7 +380,8 @@ cz=next(r for r in R if r['id']=='cozinha'); o=next(o for o in cz['opts'] if o['
 if not o:
     cz['opts'].insert(0,opt('cozinha_enx','Geladeira','A cozinha já vem montada. Entra uma geladeira side by side, para não depender da que está na copa (confirmar se ela fica com a casa).',[]));cz['def']='cozinha_enx'
     o=cz['opts'][0]
-o['items']=[I('fridge','Geladeira side by side',0.9,0.75,x=1.35,z=1.0,r=180,k='geladeira'),
+o['name']='Já está completa'; o['desc']='A cozinha já vem montada e a geladeira inox fica na copa de apoio, ao lado. Só compra outra se o dono levar a dele.'
+o['items']=[
             I('stool','Banquetas vermelhas do bar (já estão lá)',0.4,0.4,x=-0.35,z=1.05,m='redStool',ref=True),I('stool','Banqueta vermelha',0.4,0.4,x=0.35,z=1.05,m='redStool',ref=True)]
 # peças repetidas só para o desenho: escondidas da lista (o preço vai na primeira, com q)
 for r in R:
