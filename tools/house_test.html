@@ -1,0 +1,7 @@
+<!doctype html>
+<!-- Abre o index.html gerado trocando o furniture.js da raiz pelo src/furniture.js em edição (teste sem rodar o build).
+     Sirva a raiz do projeto: python3 -m http.server 8790 → http://localhost:8790/tools/house_test.html -->
+<script>
+fetch('/index.html').then(r=>r.text()).then(h=>{h='<base href="/">'+h.replace('<script src="furniture.js">','<script src="/src/furniture.js">');
+  document.open();document.write(h);document.close()});
+</script>

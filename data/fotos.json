@@ -1,0 +1,10 @@
+[
+ {"id":"salao","titulo":"Salão de jogos · poker + TV","sub":"Duas mesas de poker, bar iluminado e a sala de TV ao fundo","antes":"fotos/salao_antes.jpg","depois":"fotos/salao_depois.jpg"},
+ {"id":"salao2","titulo":"Salão de jogos · cinema","sub":"Meio salão vira cinema com tela de 120\" e poltronas reclináveis","antes":"fotos/salao2_antes.jpg","depois":"fotos/salao2_depois.jpg"},
+ {"id":"redonda","titulo":"Sala redonda · estúdio de podcast","sub":"Mesa para 4, três câmeras e luz de estúdio, com o vidro curvo de fundo","antes":"fotos/redonda_antes.jpg","depois":"fotos/redonda_depois.jpg"},
+ {"id":"redonda2","titulo":"Sala redonda · cinema","sub":"Blackout de veludo no vidro, tela e 6 poltronas","antes":"fotos/redonda2_antes.jpg","depois":"fotos/redonda2_depois.jpg"},
+ {"id":"vidro","titulo":"Sala de vidro · academia","sub":"Esteira e bike de frente para o jardim, rack e halteres","antes":"fotos/vidro_antes.jpg","depois":"fotos/vidro_depois.jpg"},
+ {"id":"estar","titulo":"Sala de estar","sub":"Sofá de bouclé, poltronas de couro e mesa de travertino, com o painel de TV que já existe","antes":"fotos/estar_antes.jpg","depois":"fotos/estar_depois.jpg"},
+ {"id":"master","titulo":"Suíte master","sub":"Cama king com cabeceira de linho, criados de nogueira e poltrona","antes":"fotos/master_antes.jpg","depois":"fotos/master_depois.jpg"},
+ {"id":"terraco","titulo":"Terraço do 2º pavimento","sub":"Lounge externo de teca sob o pergolado, com vista do mar","antes":"fotos/terraco_antes.jpg","depois":"fotos/terraco_depois.jpg"}
+]

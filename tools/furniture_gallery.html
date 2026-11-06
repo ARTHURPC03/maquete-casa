@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Galeria de móveis</title>
+<style>
+  html,body{margin:0;height:100%;background:#e9e6df;font:13px/1.3 -apple-system,Helvetica,Arial,sans-serif;color:#222;overflow:hidden}
+  #stage{position:absolute;inset:0}
+  .lbl{position:absolute;transform:translate(-50%,0);background:rgba(255,255,255,.85);border-radius:6px;padding:2px 7px;white-space:nowrap;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+  .lbl b{font-weight:600}.lbl small{color:#666;margin-left:4px}.lbl.err{background:#ffd9d9;color:#900}
+  #hud{position:absolute;left:10px;top:10px;background:rgba(255,255,255,.9);padding:6px 10px;border-radius:8px}
+  #hud a{color:#06c;margin-right:8px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud"></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="../src/furniture.js"></script>
+<script>
+// Amostras: um exemplar por tipo, com os parâmetros que o data/rooms.json usa.
+const SAMPLES=[
+ ['box',{w:1,d:.5,h:.45,m:'walnut'}],['sofa',{w:2.3,d:.95}],['sofaL',{w:3,d:2.1,m:'boucle'}],['armchair',{w:.8,d:.8}],
+ ['ropeChair',{w:.75,d:.75}],['rattanRound',{w:2.2,d:2.2}],['bed',{w:1.93,d:2.03}],['nightstand',{w:.5,d:.4}],
+ ['desk',{w:1.6,d:.75}],['chair',{w:.48,d:.5}],['officeChair',{w:.6,d:.6}],['stool',{w:.4,d:.4,m:'redStool'}],
+ ['dining',{w:2.4,d:1,seats:8}],['coffee',{w:1,d:.6,round:true}],['side',{w:.45,d:.45}],['rug',{w:2.4,d:1.7,m:'sand'}],
+ ['tv',{w:1.9,d:.05,y:.75}],['rack',{w:1.8,d:.45}],['slat',{w:3.2,d:.04,h:2.6}],['shelf',{w:1.8,d:.4,h:1.9}],
+ ['wardrobe',{w:2.4,d:.6}],['bar',{w:2,d:.5}],['fridge',{w:.9,d:.7}],['appliance',{w:.6,d:.6}],
+ ['washer',{w:.6,d:.65}],['poolTable',{w:2.5,d:1.4}],['pingpong',{w:2.74,d:1.53}],['poker',{w:2.4,d:1.25}],
+ ['pokerChair',{w:.6,d:.6}],['treadmill',{w:.85,d:2}],['bike',{w:.55,d:1.1}],['powerRack',{w:1.3,d:1.3}],
+ ['bench',{w:.4,d:1.3}],['dumbbells',{w:1.3,d:.45}],['mirror',{w:2.6,d:.03}],['cinemaSeat',{w:2.98,d:.95,ns:3}],
+ ['screen',{w:2.66,d:.05,y:.55}],['projector',{w:.4,d:.35}],['acoustic',{w:2.4,d:.05,h:1.8}],['curtain',{w:2.4,d:.06}],
+ ['podTable',{w:1.4,d:1.4,seats:4}],['camera',{w:.4,d:.4}],['softbox',{w:.6,d:.6}],['neon',{w:1,d:.03,y:1.9}],
+ ['lounger',{w:.7,d:1.9}],['umbrella',{w:2.6,d:2.6}],['plant',{w:.5,d:.5}],['palm',{w:.6,d:.6}],
+ ['floorLamp',{w:.4,d:.4}],['pendant',{w:1.8,d:.1}],['art',{w:1.4,d:.03,y:1.25,m:'terracotta'}],['car',{w:1.95,d:4.5}],
+ ['bikeRack',{w:1.2,d:.5}],['spa',{w:2.2,d:2.2}],['cabinet',{w:2.4,d:.55,h:2.1}],['steelShelf',{w:1.8,d:.5,h:2}],
+ ['counter',{w:2.6,d:.65,m:'walnut',top:'walnut',sink:-.6,cook:.6,upper:true}],['tall',{w:.7,d:.62}],['bbq',{w:1,d:.6}],
+ ['coatRack',{w:.4,d:.4}],['mirrorWall',{w:4,d:.02,h:2.5}]
+];
+const q=new URLSearchParams(location.search),only=q.get('t');
+const list=only?SAMPLES.filter(s=>only.split(',').includes(s[0])):SAMPLES;
+const {F}=window.FURN;
+const stage=document.getElementById('stage');
+const renderer=new THREE.WebGLRenderer({antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputEncoding=THREE.sRGBEncoding;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;stage.appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xe9e6df);
+const cols=only?Math.ceil(Math.sqrt(list.length)):8,cell=5.2,rows=Math.ceil(list.length/cols);
+const W=cols*cell,D=rows*cell;
+const camera=new THREE.PerspectiveCamera(45,1,.1,500);
+const controls=new THREE.OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.maxPolarAngle=Math.PI*.495;
+if(only&&list.length===1){camera.position.set(3.5,2.6,4.5);controls.target.set(0,.7,0)}else{camera.position.set(W/2,Math.max(W,D)*.75,D+Math.max(W,D)*.55);controls.target.set(W/2,0,D/2)}
+scene.add(new THREE.HemisphereLight(0xffffff,0x8a8070,.75));
+const sun=new THREE.DirectionalLight(0xfff3e2,1.0);sun.castShadow=true;sun.shadow.mapSize.set(4096,4096);
+sun.position.set(W/2-12,30,D/2+18);sun.target.position.set(W/2,0,D/2);scene.add(sun,sun.target);
+const sc=sun.shadow.camera,R=Math.max(W,D)*.75;sc.left=-R;sc.right=R;sc.top=R;sc.bottom=-R;sc.near=1;sc.far=120;sun.shadow.bias=-.0005;sun.shadow.radius=3;
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(W+20,D+20),new THREE.MeshStandardMaterial({color:0xdcd8cf,roughness:.9}));
+floor.rotation.x=-Math.PI/2;floor.position.set(W/2,0,D/2);floor.receiveShadow=true;scene.add(floor);
+const grid=new THREE.GridHelper(Math.max(W,D)+20,Math.round(Math.max(W,D)+20),0xbbb6ac,0xd0ccc3);grid.position.set(W/2,.002,D/2);scene.add(grid);
+const labels=[];let total=0;
+list.forEach(([t,it],i)=>{const g=new THREE.Group();const x=only&&list.length===1?0:(i%cols)*cell+cell/2,z=only&&list.length===1?0:Math.floor(i/cols)*cell+cell/2;g.position.set(x,0,z);scene.add(g);
+  const el=document.createElement('div');el.className='lbl';stage.appendChild(el);let n=0,err=null;
+  try{(F[t]||F.box)(g,Object.assign({t},it));g.traverse(o=>{if(o.isMesh)n++})}catch(e){err=e;console.error(t,e)}
+  total+=n;el.innerHTML=`<b>${t}</b><small>${n} meshes</small>`+(err?`<br>${err.message}`:'');if(err)el.classList.add('err');
+  labels.push({el,p:new THREE.Vector3(x,0,z-(only?1.2:cell*.46))})});
+if(only&&list.length===1){const bb=new THREE.Box3().setFromObject(scene.children[scene.children.length-1]),sz=bb.getSize(new THREE.Vector3()),c=bb.getCenter(new THREE.Vector3()),R=Math.max(sz.x,sz.y,sz.z)*1.3+.7;
+  camera.position.set(c.x+R*.8,c.y+R*.65,c.z+R*1.0);controls.target.copy(c)}
+document.getElementById('hud').innerHTML=`${list.length} tipos · ${total} meshes · <a href="?">todos</a>`+SAMPLES.map(s=>`<a href="?t=${s[0]}">${s[0]}</a>`).join('');
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+const v=new THREE.Vector3();
+function loop(){controls.update();renderer.render(scene,camera);
+  labels.forEach(l=>{v.copy(l.p).project(camera);const vis=v.z<1;l.el.style.display=vis?'':'none';if(vis){l.el.style.left=(v.x*.5+.5)*stage.clientWidth+'px';l.el.style.top=(-v.y*.5+.5)*stage.clientHeight+'px'}});
+  requestAnimationFrame(loop)}
+loop();
+</script>
+</body>
+</html>
