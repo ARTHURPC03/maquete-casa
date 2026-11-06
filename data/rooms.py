@@ -349,6 +349,38 @@ t['note']=t['note'].replace('na ponta, um pergolado','na ponta esquerda, do lado
 tv=next(r for r in R if r['id']=='tv'); o=next(o for o in tv['opts'] if o['id']=='tv_enx'); o['id']='tv_office'
 tv['opts'].insert(0,opt('tv_enx','Livre por enquanto','O escritório principal fica no hall do 2º pavimento. Esta sala fica livre: vira apoio de evento, quarto de hóspede improvisado ou um segundo escritório depois.',[])); tv['def']='tv_enx'
 so=next(r for r in R if r['id']=='office2'); o=next(o for o in so['opts'] if o['id']=='office2_enx'); o['items']=[]; o['name']='Vazia por enquanto'; o['desc']='O escritório fica no hall, ao lado. Esta saleta fica livre.'
+# ---- 2ª rodada do Arthur (06/11 01:40): só o que agrega; quarto cada um cuida do seu; vídeo orgânico; cinema na redonda
+def setenx(room_id,name,desc,items):
+    r=next(r for r in R if r['id']==room_id); o=next(o for o in r['opts'] if o['id']==room_id+'_enx'); o['name']=name; o['desc']=desc; o['items']=items
+cinx=[I('screen','Tela de projeção 120"',2.66,0.05,z=-3.05,y=0.55,k='tela120'),I('box','Projetor 4K a laser de ultra-curta distância (fica no chão, perto da tela)',0.55,0.4,z=-2.5,h=0.14,m='white',k='projetor'),
+      P('Soundbar Dolby Atmos','soundbar'),
+      I('cinemaSeat','Sofá de cinema reclinável (3 lugares)',2.98,0.95,z=-0.2,r=180,ns=3,k='cinemaSeat',q=3),
+      I('cinemaSeat','Sofá de cinema reclinável (3 lugares)',2.98,0.95,z=1.3,r=180,ns=3,k='cinemaSeat',q=3),
+      I('rug','Tapete 3 × 4 m',4.0,3.0,z=0.5,m='charcoal',k='tapete34')]
+for a in (120,180,240,60,300):
+    rr=math.radians(a);cinx.append(I('curtain','Cortina blackout no vidro curvo',2.6,0.06,x=3.2*math.sin(rr),z=-3.2*math.cos(rr),r=-a,m='charcoal',k='cortina' if a==180 else None,**({'q':4} if a==180 else {})))
+setenx('redonda','Cinema','É a sala mais escura e isolada da casa, embaixo da piscina: blackout no vidro curvo, projetor de ultra-curta distância com tela de 120" e 6 lugares reclináveis. O projetor fica no chão, então não tem instalação no teto.',cinx)
+r=next(r for r in R if r['id']=='redonda'); r['def']='redonda_enx'
+o=next(o for o in r['opts'] if o['id']=='redonda_enx'); o['foto']='redonda2'
+jg=next(o for o in next(r for r in R if r['id']=='jogos')['opts'] if o['id']=='jogos_enx')
+jg['items']+= [P('Câmera para gravar o dia a dia (vídeo orgânico, andando pela casa)','camera'),I('none','Microfone de lapela sem fio (sem preço achado; conferir na loja)')]
+jg['desc']+=' Para gravar no formato orgânico, andando pelos ambientes, entram só uma câmera e microfone sem fio.'
+setenx('piscina','Deck como está','O deck, a piscina e o spa já são o cenário. Sem espreguiçadeira por enquanto.',[])
+setenx('terraco','Lounge da jacuzzi','Sofá e poltronas externas de alumínio com mesa de centro, de frente para o mar, para receber gente. A jacuzzi e o pergolado já existem. Sem espreguiçadeira.',[
+    I('sofa','Sofá externo 3 lugares',2.2,0.9,x=4.0,z=-0.9,m='linen',fm='teak',k='sofaExt'),
+    I('ropeChair','Poltronas externas',0.75,0.75,x=2.4,z=0.4,r=120,k='poltronaExt',q=2),I('ropeChair','Poltrona externa',0.75,0.75,x=5.6,z=0.4,r=-120),
+    I('coffee','Mesa de centro externa',1.0,0.6,x=4.0,z=0.2,m='teak',k='mesaCentroExt')])
+setenx('master','Como está','Já tem cama, escrivaninha, painel e closet. Cada um cuida do seu quarto.',[I('bed','Cama king (já está lá)',1.93,2.03,z=-0.75,ref=True),I('desk','Escrivaninha (já está lá)',1.4,0.6,x=-2.3,z=0.9,ref=True,mon=False)])
+setenx('sb','Como está','Já tem colchão e escrivaninha. Se alguém for ficar fixo aqui, compra a própria cama.',[I('bed','Colchão (já está lá)',1.58,1.98,z=-0.6,ref=True,hb=False),I('desk','Escrivaninha (já está lá)',1.2,0.5,x=1.35,z=1.3,r=180,ref=True,mon=False)])
+h=next(o for o in next(r for r in R if r['id']=='hall2')['opts'] if o['id']=='hall2_enx')
+h['items']=[i for i in h['items'] if i['t'] not in ('desk','officeChair')]
+h['desc']='O escritório fica aqui, de frente para o blindex e o mar. As mesas vocês já têm e trazem. Entra a persiana elétrica no vidro para controlar o sol e gravar call sem reflexo.'
+cz=next(r for r in R if r['id']=='cozinha'); o=next(o for o in cz['opts'] if o['id']=='cozinha_enx') if any(o['id']=='cozinha_enx' for o in cz['opts']) else None
+if not o:
+    cz['opts'].insert(0,opt('cozinha_enx','Geladeira','A cozinha já vem montada. Entra uma geladeira side by side, para não depender da que está na copa (confirmar se ela fica com a casa).',[]));cz['def']='cozinha_enx'
+    o=cz['opts'][0]
+o['items']=[I('fridge','Geladeira side by side',0.9,0.75,x=1.35,z=1.0,r=180,k='geladeira'),
+            I('stool','Banquetas vermelhas do bar (já estão lá)',0.4,0.4,x=-0.35,z=1.05,m='redStool',ref=True),I('stool','Banqueta vermelha',0.4,0.4,x=0.35,z=1.05,m='redStool',ref=True)]
 # peças repetidas só para o desenho: escondidas da lista (o preço vai na primeira, com q)
 for r in R:
     for o in r['opts']:

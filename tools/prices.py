@@ -14,7 +14,7 @@ G={'sofa3':'Sofá 3 lugares de sala','sofaRet':'Sofá retrátil/reclinável 3 lu
  'luminariaPiso':'Luminária de piso','quadro':'Quadros/decoração','planta':'Vasos e plantas grandes','tv65':'TV 65"','tv75':'TV 75"','tv85':'TV 85"',
  'projetor':'Projetor 4K laser ultra-curta distância','tela120':'Tela de projeção 120"','soundbar':'Soundbar Dolby Atmos','cinemaSeat':'Poltrona de cinema reclinável',
  'painelAcustico':('Painel acústico',{'bom':2.0,'premium':2.78}),'poker':'Mesa de poker profissional 8-10 jogadores (oval','pokerChair':'Cadeira para mesa de poker',
- 'adega':'Frigobar/adega climatizada','cervejeira':'Cervejeira','secadora':'Secadora de roupa','espreguicadeira':'Espreguiçadeira (área externa)',
+ 'adega':'Frigobar/adega climatizada','geladeira':'Geladeira inverse/french door','cervejeira':'Cervejeira','secadora':'Secadora de roupa','espreguicadeira':'Espreguiçadeira (área externa)',
  'guardaSol':'Guarda-sol com base','sofaExt':'Sofá externo','poltronaExt':'Poltrona externa','mesaCentroExt':'Mesa de centro externa','esteira':'Esteira',
  'bike':'Bicicleta ergométrica/spinning','powerRack':'Estação de musculação ou gaiola (power rack)','banco':'Banco regulável','halteres':'Kit de halteres com suporte',
  'pisoBorracha':'Piso de borracha','espelho':'Espelho grande de parede','sm7b':'Microfone Shure SM7B','rodecaster':'Interface/mesa RØDECaster Pro II',
