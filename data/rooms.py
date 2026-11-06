@@ -327,6 +327,28 @@ o['items']=[I('desk','Mesas de trabalho',1.4,0.7,x=-0.8,z=-1.35,k='escrivaninha'
 r=next(r for r in R if r['id']=='office2'); o=next(o for o in r['opts'] if o['id']=='office2_enx')
 o['name']='Estação de trabalho'; o['desc']='Mais um posto para trabalhar ou editar, perto da escada e com sacada para a piscina.'
 o['items']=[I('desk','Mesa de trabalho',1.4,0.7,z=-0.4,k='escrivaninha'),I('officeChair','Cadeira de escritório Insight',0.6,0.6,z=0.3,r=180,k='cadeiraTrabalho')]
+# ---- ajustes do Luiz (áudio de 06/11 01:17): hall do 2º vira escritório, jacuzzi na ponta esquerda (lado da suíte)
+room('hall2','p2','Hall do pé-direito alto',16.1,13.72,'5,8 × 2,5 m',15,
+ 'Onde a escada chega no 2º pavimento, ao lado da entrada da suíte master: pé-direito bem alto, piso de madeira e uma parede de vidro (blindex) para o terraço e o mar.',
+ fix=[I('glassWall','Parede de vidro / blindex (já tem)',5.8,0.03,z=1.27,h=4.6)],
+ opts=[opt('hall2_enx','Escritório no hall','Três estações de trabalho de frente para o vidro e para o mar, com persiana elétrica no blindex para controlar o sol e gravar call sem reflexo.',[
+   I('desk','Mesas de trabalho',1.4,0.7,x=-1.9,z=0.45,r=180,k='escrivaninha',q=3),I('desk','Mesa de trabalho',1.4,0.7,x=0,z=0.45,r=180),I('desk','Mesa de trabalho',1.4,0.7,x=1.9,z=0.45,r=180),
+   I('officeChair','Cadeiras de escritório Insight',0.6,0.6,x=-1.9,z=-0.3,k='cadeiraTrabalho',q=3),I('officeChair','Cadeira Insight',0.6,0.6,x=0,z=-0.3),I('officeChair','Cadeira Insight',0.6,0.6,x=1.9,z=-0.3),
+   I('none','Persiana elétrica no blindex (sob medida, pedir orçamento; desenhada enrolada)'),
+   I('art',Q,1.2,0.03,x=0,z=-1.22,y=1.35,m='felt',k='quadro')])],
+ df='hall2_enx',fl=dict(w=5.8,d=2.55,m='madeira'))
+t=next(r for r in R if r['id']=='terraco')
+for i in t['fix']:
+    if i['t'] in ('pergola','spa'): i['x']=-i['x']
+for o in t['opts']:
+    for i in o['items']:
+        i['x']=-i.get('x',0)
+        if i.get('r'): i['r']=-i['r']
+t['note']=t['note'].replace('na ponta, um pergolado','na ponta esquerda, do lado da suíte master (junto do closet e do banheiro), um pergolado')
+# sala de TV do 1º fica livre no enxuto (o escritório principal agora é o hall do 2º); o escritório para 2 vira alternativa
+tv=next(r for r in R if r['id']=='tv'); o=next(o for o in tv['opts'] if o['id']=='tv_enx'); o['id']='tv_office'
+tv['opts'].insert(0,opt('tv_enx','Livre por enquanto','O escritório principal fica no hall do 2º pavimento. Esta sala fica livre: vira apoio de evento, quarto de hóspede improvisado ou um segundo escritório depois.',[])); tv['def']='tv_enx'
+so=next(r for r in R if r['id']=='office2'); o=next(o for o in so['opts'] if o['id']=='office2_enx'); o['items']=[]; o['name']='Vazia por enquanto'; o['desc']='O escritório fica no hall, ao lado. Esta saleta fica livre.'
 # peças repetidas só para o desenho: escondidas da lista (o preço vai na primeira, com q)
 for r in R:
     for o in r['opts']:
