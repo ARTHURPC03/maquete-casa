@@ -264,7 +264,7 @@ enx('redonda','Estúdio enxuto','Estúdio para gravar com o que importa: som bom
 enx('vidro','Sala de reunião','Para reunião de negócio: mesa para 8 com TV de 65" para apresentação. A parede de espelho fica atrás de quem apresenta, e a sala abre para o jardim.',[
     I('dining','Mesa de reunião para 8',2.2,1.0,seats=8,cm='black',cs='charcoal',k='mesaJantar8'),P('Cadeiras estofadas','cadeiraJantar',8),
     I('tv','TV 65" para apresentação',1.45,0.05,z=-2.4,y=0.9,k='tv65')])
-enx('estar','Estar das fotos','Mantém o sofá redondo de rattan e o painel de TV e completa com tapete, duas poltronas de couro e mesa de centro. É o canto que mais aparece em foto.',[
+enx('estar','Estar das fotos','Mantém o sofá redondo de rattan e o painel de TV e completa com tapete, duas poltronas de couro e mesa de centro. É o canto que mais aparece em foto. Quadro com tema de dinheiro na parede lateral.',[
     I('rattanRound','Sofá redondo de rattan (já está lá)',2.2,2.2,x=-1.2,z=0.6,ref=True),I('rack','Rack branco (já está lá)',2.2,0.45,z=-1.68,m='white',ref=True),
     I('rug','Tapete 3 × 4 m',4.0,3.0,z=0.1,m='sand',k='tapete34'),I('armchair','Poltronas de couro',0.8,0.82,x=1.9,z=0.5,r=200,k='poltrona',q=2),
     I('armchair','Poltrona de couro',0.8,0.82,x=2.3,z=-0.7,r=240),I('coffee','Mesa de centro',0.85,0.85,x=0.4,z=-0.2,round=True,k='mesaCentro'),
@@ -308,6 +308,25 @@ enx('gar','Garagem','Três vagas, o ping-pong guardado e uma estante de aço.',[
     I('car','Vaga 1',1.95,4.5,x=-4.3,z=0.6,ref=True),I('car','Vaga 2',1.95,4.5,x=-1.1,z=0.6,ref=True),I('car','Vaga 3',1.95,4.5,x=2.1,z=0.6,ref=True),
     I('pingpong','Ping-pong guardado (já está na casa)',2.74,1.53,x=4.6,z=-2.2,r=90,ref=True),
     I('steelShelf','Estante de aço',1.8,0.5,x=-0.9,z=-3.05,h=2.0,k='estanteAco')])
+# ---- sem vasos e plantas em nenhum plano (pedido do Arthur, 06/11); no lugar, quadros com tema de dinheiro e estações de trabalho
+for r in R:
+    for o in r['opts']: o['items']=[i for i in o['items'] if i['t'] not in ('palm','plant')]
+def add(room_id,opt_id,items):
+    r=next(r for r in R if r['id']==room_id);next(o for o in r['opts'] if o['id']==opt_id)['items'].extend(items)
+Q='Quadro decorativo tema dinheiro'
+add('jogos','jogos_enx',[I('art',Q+' (salão)',1.2,0.03,x=-3.4,z=-3.3,y=1.35,m='felt',k='quadro',q=3),I('art',Q,1.2,0.03,x=3.6,z=-3.3,y=1.35,m='felt'),
+                         I('art',Q,1.2,0.03,x=-5.82,z=0,r=-90,y=1.35,m='felt')])
+add('estar','estar_enx',[I('art',Q,1.4,0.03,x=-2.9,z=0,r=-90,y=1.3,m='felt',k='quadro')])
+add('vidro','vidro_enx',[I('art',Q,1.2,0.03,x=2.12,z=0,r=90,y=1.35,m='felt',k='quadro')])
+add('master','master_enx',[I('art',Q+' sobre a cama',1.2,0.03,z=-1.88,y=1.35,m='felt',k='quadro')])
+r=next(r for r in R if r['id']=='tv'); o=next(o for o in r['opts'] if o['id']=='tv_enx')
+o['name']='Escritório para 2'; o['desc']='Duas estações de trabalho lado a lado, de frente para a janela, com cadeira boa e espaço para computador e monitor. Os computadores vocês já têm.'
+o['items']=[I('desk','Mesas de trabalho',1.4,0.7,x=-0.8,z=-1.35,k='escrivaninha',q=2),I('desk','Mesa de trabalho',1.4,0.7,x=0.8,z=-1.35),
+            I('officeChair','Cadeiras de escritório Insight',0.6,0.6,x=-0.8,z=-0.6,r=180,k='cadeiraTrabalho',q=2),I('officeChair','Cadeira Insight',0.6,0.6,x=0.8,z=-0.6,r=180),
+            I('art',Q,1.0,0.03,x=1.9,z=0.4,r=90,y=1.35,m='felt',k='quadro')]
+r=next(r for r in R if r['id']=='office2'); o=next(o for o in r['opts'] if o['id']=='office2_enx')
+o['name']='Estação de trabalho'; o['desc']='Mais um posto para trabalhar ou editar, perto da escada e com sacada para a piscina.'
+o['items']=[I('desk','Mesa de trabalho',1.4,0.7,z=-0.4,k='escrivaninha'),I('officeChair','Cadeira de escritório Insight',0.6,0.6,z=0.3,r=180,k='cadeiraTrabalho')]
 # peças repetidas só para o desenho: escondidas da lista (o preço vai na primeira, com q)
 for r in R:
     for o in r['opts']:

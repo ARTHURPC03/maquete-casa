@@ -184,6 +184,15 @@ const FLN={garagem:'Garagem',terreo:'Térreo',p1:'1º pavimento',p2:'2º pavimen
 const WALL_H=2.7;
 const {F:FN,MAT,M}=window.FURN;
 // peças de arquitetura que não são móvel (ficam aqui para não misturar com a biblioteca de móveis)
+// quadro com tema de dinheiro (cédula + $), desenhado uma vez em canvas
+const moneyTex=(()=>{const c=document.createElement('canvas');c.width=256;c.height=384;const x=c.getContext('2d');
+  const gr=x.createLinearGradient(0,0,256,384);gr.addColorStop(0,'#0f3d2a');gr.addColorStop(1,'#1f6b44');x.fillStyle=gr;x.fillRect(0,0,256,384);
+  x.strokeStyle='#c9a54a';x.lineWidth=6;x.strokeRect(14,14,228,356);x.lineWidth=1.5;x.strokeRect(26,26,204,332);
+  x.fillStyle='#d8b75a';x.font='bold 190px Georgia,serif';x.textAlign='center';x.textBaseline='middle';x.fillText('$',128,170);
+  x.font='bold 34px Georgia,serif';x.fillText('100',128,300);x.font='600 16px Georgia,serif';x.fillText('MONEY MODE',128,338);
+  const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t})();
+const _art=FN.art;FN.art=(g,it)=>{_art(g,it);if(it.m!=='felt')return;const w=it.w,h=it.h||.9,y=it.y??1.3;
+  const o=new THREE.Mesh(new THREE.PlaneGeometry(w-.16,h-.16),new THREE.MeshStandardMaterial({map:moneyTex,roughness:.6}));o.position.set(0,y+h/2,.026);g.add(o)};
 FN.railing=(g,it)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(it.w,1.1,.02),MAT.glass);o.position.y=.55;g.add(o);const t=new THREE.Mesh(new THREE.BoxGeometry(it.w,.04,.05),MAT.steel);t.position.y=1.1;g.add(t)};
 FN.pergola=(g,it)=>{const w=it.w,d=it.d,h=2.6,wd=MAT.teak||MAT.walnut;const B=(a,b,c,x,y,z)=>{const o=new THREE.Mesh(new THREE.BoxGeometry(a,b,c),wd);o.position.set(x,y,z);o.castShadow=true;g.add(o)};
   [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([a,b])=>B(.15,h,.15,a*(w/2-.08),h/2,b*(d/2-.08)));[-1,1].forEach(b=>B(w+.3,.2,.12,0,h-.1,b*(d/2-.08)));
